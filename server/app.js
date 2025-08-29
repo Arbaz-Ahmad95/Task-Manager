@@ -12,33 +12,28 @@ dotenv.config()
 
 const app = express()
 
+// ✅ KEEP ONLY THIS CORS CONFIG - Remove the commented one
 app.use(cors({
-  origin: true, 
+  origin: true,  // Allow all origins
   credentials: true
 }))
 
-
-// const allowedOrigins = [
-//   'http://localhost:3000',
-//   'https://your-vercel-app.vercel.app', // Replace with your actual Vercel URL
-//   'https://*.vercel.app'
-// ]
-
-// app.use(cors({
-//   origin: function (origin, callback) {
-//     // Allow requests with no origin (like mobile apps, Postman)
-//     if (!origin) return callback(null, true)
-    
-//     if (allowedOrigins.indexOf(origin) === -1) {
-//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.'
-//       return callback(new Error(msg), false)
-//     }
-//     return callback(null, true)
-//   },
-//   credentials: true
-// }))
-
 app.use(express.json())
+
+// ✅ Add this API root route
+app.get('/api', (req, res) => {
+  res.json({
+    message: 'Task Manager API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      tasks: '/api/tasks',
+      users: '/api/users', 
+      stats: '/api/stats'
+    },
+    documentation: 'Use the endpoints above with /api/ prefix'
+  });
+});
 
 // Root route
 app.get('/', (req, res) => {
@@ -51,7 +46,7 @@ app.get('/', (req, res) => {
       users: '/api/users',
       stats: '/api/stats'
     },
-    documentation: 'Add /api/ prefix to access endpoints'
+    documentation: 'Visit /api for detailed endpoint information'
   });
 });
 
