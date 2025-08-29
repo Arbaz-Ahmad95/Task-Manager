@@ -1,5 +1,8 @@
 
 import api from './api'
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
 
 export const authService = {
   login: async (email, password) => {
@@ -32,10 +35,15 @@ export const authService = {
   logout: async () => {
     try {
       await api.post('/auth/logout')
+      localStorage.removeItem('token')
+      localStorage.removeItem('useMockData')
+      localStorage.removeItem('userData')
+      navigate('/login');
     } catch (error) {
-      console.error('Logout error:', error)
+      throw new Error('Logout failed')
+       
     }
-  }
+ }
 }
 
 export default authService
