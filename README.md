@@ -3,8 +3,16 @@
 git
 ## 🚀 Live Demo
 
-**Frontend URL:** http://localhost:3000  
-**Backend API:** http://localhost:5000
+**Frontend URL:** https://task-manager-frontend-rosy-gamma.vercel.app/login 
+**Backend API:** https://task-manager-jfco.onrender.com/
+
+## Demo Login
+
+You can use the following demo credentials to log in as an Admin:
+
+- **Email:** admin@example.com  
+- **Password:** admin@example.com
+
 
 ## 📋 Features
 
