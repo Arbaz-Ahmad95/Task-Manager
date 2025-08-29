@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
         // Fall back to mock data if backend verification fails
         const mockUser = { id: '1', name: 'Admin User', email: 'admin@example.com', role: 'admin' }
         setUser(mockUser)
-        localStorage.setItem('useMockData', 'true')
+        localStorage.setItem('useMockData', 'false')
         localStorage.setItem('userData', JSON.stringify(mockUser))
       }
     } else if (useMockData) {
