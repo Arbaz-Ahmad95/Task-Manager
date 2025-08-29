@@ -1,4 +1,3 @@
-
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
@@ -13,11 +12,45 @@ dotenv.config()
 
 const app = express()
 
-// Middleware
-app.use(cors())
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://your-vercel-app.vercel.app', // Replace with your actual Vercel URL
+  'https://*.vercel.app'
+]
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman)
+    if (!origin) return callback(null, true)
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.'
+      return callback(new Error(msg), false)
+    }
+    return callback(null, true)
+  },
+  credentials: true
+}))
+
 app.use(express.json())
 
-// Routes
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Task Manager API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      tasks: '/api/tasks',
+      users: '/api/users',
+      stats: '/api/stats'
+    },
+    documentation: 'Add /api/ prefix to access endpoints'
+  });
+});
+
+// API Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/tasks', taskRoutes)
 app.use('/api/users', userRoutes)
@@ -29,33 +62,18 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' })
 })
 
-
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Task Manager API is running!',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      tasks: '/api/tasks',
-      users: '/api/users',
-      stats: '/api/stats'
-    },
-    documentation: 'See README for API documentation'
-  });
-});
-
-
+// 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+  res.status(404).json({ message: 'Route not found' })
+})
 
 // Database connection
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(() => console.log('MongoDB connected'))
-.catch(err => console.log(err))
+.catch(err => console.log('MongoDB connection error:', err))
 
 const PORT = process.env.PORT || 5000
 
