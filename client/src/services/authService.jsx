@@ -32,18 +32,16 @@ export const authService = {
     }
   },
 
+  
   logout: async () => {
     try {
-      await api.post('/auth/logout')
-      localStorage.removeItem('token')
-      localStorage.removeItem('useMockData')
-      localStorage.removeItem('userData')
-      navigate('/login');
+      await api.post("/auth/logout");   // API call only
+      localStorage.removeItem("token"); // clear token
     } catch (error) {
-      throw new Error('Logout failed')
-       
+      console.error("Logout error:", error);
     }
- }
+  }
+
 }
 
 export default authService
