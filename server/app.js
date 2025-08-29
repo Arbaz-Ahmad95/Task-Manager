@@ -29,10 +29,25 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' })
 })
 
-// 404 handler
+
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Task Manager API is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      tasks: '/api/tasks',
+      users: '/api/users',
+      stats: '/api/stats'
+    },
+    documentation: 'See README for API documentation'
+  });
+});
+
+
 app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route not found' })
-})
+  res.status(404).json({ message: 'Route not found' });
+});
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI, {
